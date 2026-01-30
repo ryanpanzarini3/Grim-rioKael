@@ -2,28 +2,44 @@
 // PWA - PROGRESSIVE WEB APP - CONFIGURAÇÃO
 // ============================================
 let deferredPrompt = null;
+let isIOSPWA = false;
+let isIOSDevice = /iPad|iPhone|iPod/.test(navigator.userAgent);
 
 function setupPWA() {
+    // Detecta se é um app PWA no iOS
+    isIOSPWA = window.navigator.standalone === true;
+    
     const installBanner = document.getElementById('install-banner');
     const installBtn = document.getElementById('install-btn');
     const dismissBtn = document.getElementById('dismiss-banner');
 
-    // Detecta quando o navegador quer mostrar o botão de instalar
+    console.log('[PWA] iOS Device:', isIOSDevice);
+    console.log('[PWA] iOS PWA:', isIOSPWA);
+    console.log('[PWA] Standalone:', window.navigator.standalone);
+
+    // Detecta quando o navegador quer mostrar o botão de instalar (não funciona no iOS)
     window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         deferredPrompt = e;
-        installBanner.classList.remove('hidden');
+        if (!isIOSDevice) {
+            installBanner.classList.remove('hidden');
+            console.log('[PWA] beforeinstallprompt capturado');
+        }
     });
 
-    // Botão para instalar
+    // Botão para instalar (Android/Desktop)
     if (installBtn) {
         installBtn.addEventListener('click', async () => {
             if (deferredPrompt) {
                 deferredPrompt.prompt();
                 const { outcome } = await deferredPrompt.userChoice;
-                console.log(`Usuário respondeu ao prompt com: ${outcome}`);
+                console.log(`[PWA] Usuário respondeu: ${outcome}`);
                 deferredPrompt = null;
                 installBanner.classList.add('hidden');
+            } else if (isIOSDevice) {
+                // Instrução manual para iOS
+                alert('No iOS, toque o botão Compartilhar e selecione "Adicionar à Tela Inicial"');
+                console.log('[PWA] Instruções iOS mostradas');
             }
         });
     }
@@ -37,10 +53,48 @@ function setupPWA() {
 
     // Detecta quando o app foi instalado
     window.addEventListener('appinstalled', () => {
-        console.log('✅ PWA foi instalado com sucesso!');
+        console.log('[PWA] ✅ App instalado com sucesso!');
         deferredPrompt = null;
         installBanner.classList.add('hidden');
     });
+
+    // Mostrar banner no iOS se não está instalado como PWA
+    if (isIOSDevice && !isIOSPWA) {
+        setTimeout(() => {
+            installBanner.classList.remove('hidden');
+            installBtn.textContent = '📱 Ver instruções';
+        }, 2000);
+    }
+
+    // Registrar Service Worker com mais detalhes
+    if ('serviceWorker' in navigator) {
+        console.log('[PWA] Service Worker suportado');
+        navigator.serviceWorker.ready.then(registration => {
+            console.log('[PWA] Service Worker está pronto:', registration);
+        });
+        
+        navigator.serviceWorker.register('./service-worker.js', {
+            scope: './'
+        }).then(registration => {
+            console.log('[PWA] ✅ Service Worker registrado:', registration.scope);
+            
+            // Verificar atualizações
+            registration.onupdatefound = () => {
+                const newWorker = registration.installing;
+                console.log('[PWA] Novo Service Worker encontrado');
+                
+                newWorker.onstatechange = () => {
+                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                        console.log('[PWA] Atualização disponível!');
+                    }
+                };
+            };
+        }).catch(error => {
+            console.log('[PWA] ❌ Erro ao registrar Service Worker:', error);
+        });
+    } else {
+        console.log('[PWA] ⚠️ Service Worker não suportado neste navegador');
+    }
 }
 
 // ============================================
