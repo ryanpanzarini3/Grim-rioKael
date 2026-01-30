@@ -2,15 +2,18 @@
   "name": "Grimório do Kael - Ficha D&D 5e",
   "short_name": "Grimório Kael",
   "description": "Ficha de personagem interativa para D&D 5e com edição completa e persistência de dados",
-  "start_url": "/index.html",
+  "start_url": "./index.html",
   "display": "standalone",
+  "orientation": "portrait-primary",
   "background_color": "#0f172a",
   "theme_color": "#a78bfa",
-  "orientation": "portrait-primary",
-  "scope": "/",
+  "scope": "./",
+  "lang": "pt-BR",
+  "dir": "ltr",
+  "prefer_related_applications": false,
   "icons": [
     {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%230f172a' width='192' height='192'/><circle cx='96' cy='96' r='80' fill='%23a78bfa'/><path d='M96 40 L120 80 L160 85 L130 115 L135 155 L96 130 L57 155 L62 115 L32 85 L72 80 Z' fill='%237e22ce'/></svg>",
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><defs><style>body{margin:0;padding:0}svg{display:block}</style></defs><rect fill='%230f172a' width='192' height='192'/><circle cx='96' cy='96' r='80' fill='%23a78bfa'/><path d='M96 40 L120 80 L160 85 L130 115 L135 155 L96 130 L57 155 L62 115 L32 85 L72 80 Z' fill='%237e22ce'/></svg>",
       "sizes": "192x192",
       "type": "image/svg+xml",
       "purpose": "any"
@@ -20,6 +23,12 @@
       "sizes": "512x512",
       "type": "image/svg+xml",
       "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%230f172a' width='180' height='180'/><circle cx='90' cy='90' r='75' fill='%23a78bfa'/><path d='M90 35 L110 75 L150 80 L125 105 L130 145 L90 120 L50 145 L55 105 L30 80 L70 75 Z' fill='%237e22ce'/></svg>",
+      "sizes": "180x180",
+      "type": "image/svg+xml",
+      "purpose": "any"
     }
   ],
   "categories": ["games", "productivity"],
@@ -36,7 +45,7 @@
       "name": "Combate",
       "short_name": "Combate",
       "description": "Acesse a tela de combate rapidamente",
-      "url": "index.html?tab=combate",
+      "url": "./index.html?tab=combate",
       "icons": [
         {
           "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'><rect fill='%230f172a' width='96' height='96'/><path d='M48 20 L65 45 L90 50 L70 70 L75 95 L48 75 L21 95 L26 70 L6 50 L31 45 Z' fill='%23f59e0b'/></svg>",
@@ -49,7 +58,7 @@
       "name": "Magias",
       "short_name": "Magias",
       "description": "Acesse seu grimório de magias",
-      "url": "index.html?tab=magias",
+      "url": "./index.html?tab=magias",
       "icons": [
         {
           "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'><rect fill='%230f172a' width='96' height='96'/><circle cx='48' cy='48' r='35' fill='none' stroke='%23a78bfa' stroke-width='4'/><path d='M48 20 L65 45 L48 68 L31 45 Z' fill='%23a78bfa'/></svg>",
