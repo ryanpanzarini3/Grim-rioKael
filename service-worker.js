@@ -1,27 +1,28 @@
 const CACHE_NAME = 'grimorio-kael-v1';
 const ASSETS_TO_CACHE = [
-    '/index.html',
-    '/script.js',
-    '/style.css',
-    '/manifest.json',
-    'https://cdn.tailwindcss.com',
-    'https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js'
+    './',
+    './index.html',
+    './script.js',
+    './style.css',
+    './manifest.json'
 ];
 
 // Instala o service worker e faz cache dos assets
 self.addEventListener('install', (event) => {
+    console.log('[ServiceWorker] Instalando...');
     event.waitUntil(
         caches.open(CACHE_NAME).then((cache) => {
+            console.log('[ServiceWorker] Cache aberto');
             return cache.addAll(ASSETS_TO_CACHE).catch(err => {
-                // Se algum arquivo falhar, continua mesmo assim
-                console.warn('Alguns assets não puderam ser cacheados', err);
-                return cache.addAll([
-                    '/index.html',
-                    '/script.js',
-                    '/style.css',
-                    '/manifest.json'
-                ]);
+                console.log('[ServiceWorker] Erro no cache completo, tentando cache parcial', err);
+                return Promise.all([
+                    cache.add('./index.html'),
+                    cache.add('./script.js'),
+                    cache.add('./style.css')
+                ]).catch(e => console.log('[ServiceWorker] Erro no cache parcial:', e));
             });
+        }).catch(err => {
+            console.log('[ServiceWorker] Erro ao abrir cache:', err);
         })
     );
     self.skipWaiting();
@@ -29,11 +30,13 @@ self.addEventListener('install', (event) => {
 
 // Ativa o service worker e limpa caches antigos
 self.addEventListener('activate', (event) => {
+    console.log('[ServiceWorker] Ativando...');
     event.waitUntil(
         caches.keys().then((cacheNames) => {
             return Promise.all(
                 cacheNames.map((cacheName) => {
                     if (cacheName !== CACHE_NAME) {
+                        console.log('[ServiceWorker] Deletando cache antigo:', cacheName);
                         return caches.delete(cacheName);
                     }
                 })
@@ -45,33 +48,36 @@ self.addEventListener('activate', (event) => {
 
 // Estratégia Network First com fallback para Cache
 self.addEventListener('fetch', (event) => {
-    // Ignora requisições de API externas que não conseguimos fazer cache
-    if (event.request.url.includes('cdn.tailwindcss') || 
-        event.request.url.includes('feather-icons')) {
+    const { request } = event;
+    const url = new URL(request.url);
+
+    // Ignora requisições de API externas
+    if (url.hostname !== self.location.hostname) {
         event.respondWith(
-            fetch(event.request).catch(() => {
-                return new Response('Offline - CDN não disponível', {
-                    status: 503,
-                    statusText: 'Service Unavailable'
-                });
+            fetch(request).catch(() => {
+                console.log('[ServiceWorker] Offline - requisição externa bloqueada:', url.href);
+                return new Response('Offline', { status: 503 });
             })
         );
         return;
     }
 
-    // Network first para documentos
-    if (event.request.headers.get('Accept')?.includes('text/html')) {
+    // Network first para documentos HTML
+    if (request.headers.get('Accept')?.includes('text/html') || request.url.endsWith('/')) {
         event.respondWith(
-            fetch(event.request)
+            fetch(request)
                 .then((response) => {
-                    const clonedResponse = response.clone();
-                    caches.open(CACHE_NAME).then((cache) => {
-                        cache.put(event.request, clonedResponse);
-                    });
+                    if (response.ok) {
+                        const clonedResponse = response.clone();
+                        caches.open(CACHE_NAME).then((cache) => {
+                            cache.put(request, clonedResponse);
+                        });
+                    }
                     return response;
                 })
                 .catch(() => {
-                    return caches.match(event.request);
+                    console.log('[ServiceWorker] Usando cache para:', request.url);
+                    return caches.match(request);
                 })
         );
         return;
@@ -79,24 +85,25 @@ self.addEventListener('fetch', (event) => {
 
     // Cache first para outros assets
     event.respondWith(
-        caches.match(event.request)
+        caches.match(request)
             .then((response) => {
                 if (response) {
+                    console.log('[ServiceWorker] Cache hit:', request.url);
                     return response;
                 }
-                return fetch(event.request).then((response) => {
-                    const clonedResponse = response.clone();
-                    caches.open(CACHE_NAME).then((cache) => {
-                        cache.put(event.request, clonedResponse);
-                    });
+                return fetch(request).then((response) => {
+                    if (response.ok) {
+                        const clonedResponse = response.clone();
+                        caches.open(CACHE_NAME).then((cache) => {
+                            cache.put(request, clonedResponse);
+                        });
+                    }
                     return response;
                 });
             })
             .catch(() => {
-                return new Response('Offline - Asset não disponível', {
-                    status: 503,
-                    statusText: 'Service Unavailable'
-                });
+                console.log('[ServiceWorker] Offline - asset não disponível:', request.url);
+                return new Response('Offline', { status: 503 });
             })
     );
 });
