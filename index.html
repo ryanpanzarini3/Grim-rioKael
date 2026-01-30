@@ -2,14 +2,31 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
     <meta name="theme-color" content="#a78bfa">
     <meta name="description" content="Ficha de personagem interativa para D&D 5e com edição completa e persistência de dados">
+    
+    <!-- iOS Web App Meta Tags -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Grimório Kael">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%230f172a' width='180' height='180'/><circle cx='90' cy='90' r='75' fill='%23a78bfa'/><path d='M90 35 L110 75 L150 80 L125 105 L130 145 L90 120 L50 145 L55 105 L30 80 L70 75 Z' fill='%237e22ce'/></svg>">
+    <meta name="apple-itunes-app" content="app-id=1234567890">
+    <meta name="format-detection" content="telephone=no">
+    
+    <!-- iPad específico -->
+    <meta name="apple-mobile-web-app-orientations" content="portrait landscape">
+    
+    <!-- Touch Icons para iOS -->
+    <link rel="apple-touch-icon" sizes="180x180" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%230f172a' width='180' height='180'/><circle cx='90' cy='90' r='75' fill='%23a78bfa'/><path d='M90 35 L110 75 L150 80 L125 105 L130 145 L90 120 L50 145 L55 105 L30 80 L70 75 Z' fill='%237e22ce'/></svg>">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%230f172a' width='192' height='192'/><circle cx='96' cy='96' r='80' fill='%23a78bfa'/><path d='M96 40 L120 80 L160 85 L130 115 L135 155 L96 130 L57 155 L62 115 L32 85 L72 80 Z' fill='%237e22ce'/></svg>">
+    
+    <!-- Web App Manifest -->
     <link rel="manifest" href="manifest.json">
+    
+    <!-- Preload essencial -->
+    <link rel="preload" href="style.css" as="style">
+    <link rel="preload" href="script.js" as="script">
+    
     <title>Grimório do Kael | Ficha D&D 5e</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
@@ -37,114 +54,114 @@
     </script>
 </head>
 <body class="bg-dark-900 text-gray-100 min-h-screen font-serif">
-    <div class="container mx-auto px-4 py-8 max-w-7xl">
+    <div class="container">
         <!-- Banner de Instalação PWA -->
-        <div id="install-banner" class="hidden mb-4 p-4 bg-secondary-500/20 border border-secondary-500/50 rounded-lg flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <span class="text-2xl">📱</span>
-                <div>
-                    <p class="font-bold text-secondary-400">Instalar como App</p>
-                    <p class="text-xs text-gray-400">Acesse a ficha do seu celular em qualquer lugar!</p>
+        <div id="install-banner" class="hidden mb-4 p-4 bg-secondary-500/20 border border-secondary-500/50 rounded-lg flex items-center justify-between flex-wrap gap-2">
+            <div class="flex items-center gap-3 flex-1 min-w-0">
+                <span class="text-2xl flex-shrink-0">📱</span>
+                <div class="min-w-0">
+                    <p class="font-bold text-secondary-400 text-sm">Instalar como App</p>
+                    <p class="text-xs text-gray-400">Acesse em qualquer lugar!</p>
                 </div>
             </div>
-            <div class="flex gap-2">
-                <button id="install-btn" class="bg-secondary-500 hover:bg-secondary-600 text-dark-900 px-4 py-2 rounded font-bold transition text-sm">Instalar</button>
-                <button id="dismiss-banner" class="bg-gray-700 hover:bg-gray-600 text-gray-100 px-3 py-2 rounded transition text-sm">✕</button>
+            <div class="flex gap-2 flex-shrink-0">
+                <button id="install-btn" class="bg-secondary-500 hover:bg-secondary-600 text-dark-900 px-3 py-2 rounded font-bold transition text-sm min-h-44">Instalar</button>
+                <button id="dismiss-banner" class="bg-gray-700 hover:bg-gray-600 text-gray-100 px-2 py-1 rounded transition text-sm">✕</button>
             </div>
         </div>
 
         <!-- Cabeçalho Mágico -->
-        <header class="mb-8 p-6 bg-dark-800 rounded-lg border-l-4 border-primary-500 shadow-lg arcane-box">
-            <div class="flex items-center gap-4 mb-6">
-                <div class="text-4xl">✨</div>
-                <div>
-                    <h1 class="text-4xl font-bold text-secondary-500 header-glow">Grimório do Kael</h1>
-                    <p class="text-gray-400 text-sm">Ficha de Personagem - D&D 5e</p>
+        <header class="mb-4 p-4 bg-dark-800 rounded-lg border-l-4 border-primary-500 shadow-lg arcane-box">
+            <div class="flex items-center gap-2 mb-4 flex-wrap">
+                <div class="text-3xl flex-shrink-0">✨</div>
+                <div class="flex-1 min-w-0">
+                    <h1 class="text-2xl sm:text-4xl font-bold text-secondary-500 header-glow">Grimório do Kael</h1>
+                    <p class="text-gray-400 text-xs sm:text-sm">Ficha de Personagem - D&D 5e</p>
                 </div>
             </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                <div class="md:col-span-3">
+            <div class="grid grid-cols-1 gap-4 mb-4">
+                <div>
                     <input type="text" id="nomePersonagem" placeholder="Kael Vaerun" 
-                        class="w-full bg-transparent text-3xl font-bold border-b-2 border-secondary-500 pb-2 focus:outline-none mb-4">
+                        class="w-full bg-transparent text-2xl sm:text-3xl font-bold border-b-2 border-secondary-500 pb-2 focus:outline-none mb-3">
                     
-                    <div class="grid grid-cols-2 gap-4">
+                    <div class="grid grid-cols-2 gap-2">
                         <div>
-                            <label class="block text-sm text-secondary-500 font-bold">Classe & Nível</label>
+                            <label class="block text-xs text-secondary-500 font-bold mb-1">Classe & Nível</label>
                             <input type="text" id="classeNivel" placeholder="Bruxo 5" 
-                                class="w-full bg-dark-700 rounded px-3 py-2 focus:outline-none">
+                                class="w-full bg-dark-700 rounded px-2 py-2 focus:outline-none text-sm">
                         </div>
                         <div>
-                            <label class="block text-sm text-secondary-500 font-bold">Raça</label>
+                            <label class="block text-xs text-secondary-500 font-bold mb-1">Raça</label>
                             <input type="text" id="raca" placeholder="Elfo Noturno" 
-                                class="w-full bg-dark-700 rounded px-3 py-2 focus:outline-none">
+                                class="w-full bg-dark-700 rounded px-2 py-2 focus:outline-none text-sm">
                         </div>
                         <div>
-                            <label class="block text-sm text-secondary-500 font-bold">Antecedente</label>
+                            <label class="block text-xs text-secondary-500 font-bold mb-1">Antecedente</label>
                             <input type="text" id="antecedente" placeholder="Eremita" 
-                                class="w-full bg-dark-700 rounded px-3 py-2 focus:outline-none">
+                                class="w-full bg-dark-700 rounded px-2 py-2 focus:outline-none text-sm">
                         </div>
                         <div>
-                            <label class="block text-sm text-secondary-500 font-bold">Tendência</label>
+                            <label class="block text-xs text-secondary-500 font-bold mb-1">Tendência</label>
                             <input type="text" id="tendencia" placeholder="Neutro" 
-                                class="w-full bg-dark-700 rounded px-3 py-2 focus:outline-none">
+                                class="w-full bg-dark-700 rounded px-2 py-2 focus:outline-none text-sm">
                         </div>
                     </div>
                 </div>
                 <div>
-                    <label class="block text-sm text-secondary-500 font-bold mb-2">Aparência</label>
-                    <textarea id="aparencia" rows="5" placeholder="Olhos violeta que brilham no escuro, cabelos prateados longos..." 
-                        class="w-full bg-dark-700 rounded px-3 py-2 focus:outline-none text-xs resize-none"></textarea>
+                    <label class="block text-xs text-secondary-500 font-bold mb-1">Aparência</label>
+                    <textarea id="aparencia" rows="4" placeholder="Olhos violeta que brilham no escuro, cabelos prateados longos..." 
+                        class="w-full bg-dark-700 rounded px-2 py-2 focus:outline-none text-xs resize-none"></textarea>
                 </div>
             </div>
 
             <!-- Atributos em Linha Mágica -->
-            <div class="mt-6 pt-6 border-t border-dark-700">
-                <h3 class="text-sm font-bold text-secondary-500 mb-4 text-center">ATRIBUTOS FUNDAMENTAIS</h3>
-                <div class="grid grid-cols-3 md:grid-cols-6 gap-3">
+            <div class="mt-4 pt-4 border-t border-dark-700">
+                <h3 class="text-xs font-bold text-secondary-500 mb-3 text-center">ATRIBUTOS</h3>
+                <div class="grid grid-cols-3 md:grid-cols-6 gap-2">
                     <!-- For, Des, Con, Int, Sab, Car -->
                 </div>
             </div>
         </header>
 
         <!-- Navegação de Telas Mágica -->
-        <div class="mb-6">
-            <div class="flex overflow-x-auto border-b border-dark-700 gap-2">
-                <button data-tab="inicio" class="tab-button active px-6 py-3 font-medium text-secondary-500">
+        <div class="mb-4">
+            <div class="flex overflow-x-auto border-b border-dark-700 gap-1 -mx-4 px-4">
+                <button data-tab="inicio" class="tab-button active px-3 py-2 font-medium text-secondary-500 text-xs sm:text-sm">
                     🏠 Início
                 </button>
-                <button data-tab="combate" class="tab-button px-6 py-3 font-medium text-gray-400 hover:text-secondary-500">
+                <button data-tab="combate" class="tab-button px-3 py-2 font-medium text-gray-400 hover:text-secondary-500 text-xs sm:text-sm">
                     ⚔️ Combate
                 </button>
-                <button data-tab="magias" class="tab-button px-6 py-3 font-medium text-gray-400 hover:text-secondary-500">
+                <button data-tab="magias" class="tab-button px-3 py-2 font-medium text-gray-400 hover:text-secondary-500 text-xs sm:text-sm">
                     🪄 Magias
                 </button>
-                <button data-tab="proficiencias" class="tab-button px-6 py-3 font-medium text-gray-400 hover:text-secondary-500">
-                    🛡️ Proficiências
+                <button data-tab="proficiencias" class="tab-button px-3 py-2 font-medium text-gray-400 hover:text-secondary-500 text-xs sm:text-sm">
+                    🛡️ Prof
                 </button>
-                <button data-tab="caracteristicas" class="tab-button px-6 py-3 font-medium text-gray-400 hover:text-secondary-500">
-                    ✨ Características
+                <button data-tab="caracteristicas" class="tab-button px-3 py-2 font-medium text-gray-400 hover:text-secondary-500 text-xs sm:text-sm">
+                    ✨ Caract
                 </button>
-                <button data-tab="talentos" class="tab-button px-6 py-3 font-medium text-gray-400 hover:text-secondary-500">
-                    ⭐ Talentos
+                <button data-tab="talentos" class="tab-button px-3 py-2 font-medium text-gray-400 hover:text-secondary-500 text-xs sm:text-sm">
+                    ⭐ Tal
                 </button>
-                <button data-tab="aliados" class="tab-button px-6 py-3 font-medium text-gray-400 hover:text-secondary-500">
-                    👥 Aliados
+                <button data-tab="aliados" class="tab-button px-3 py-2 font-medium text-gray-400 hover:text-secondary-500 text-xs sm:text-sm">
+                    👥 Alia
                 </button>
-                <button data-tab="inventario" class="tab-button px-6 py-3 font-medium text-gray-400 hover:text-secondary-500">
-                    🎒 Inventário
+                <button data-tab="inventario" class="tab-button px-3 py-2 font-medium text-gray-400 hover:text-secondary-500 text-xs sm:text-sm">
+                    🎒 Inv
                 </button>
-                <button data-tab="anotacoes" class="tab-button px-6 py-3 font-medium text-gray-400 hover:text-secondary-500">
-                    📝 Anotações
+                <button data-tab="anotacoes" class="tab-button px-3 py-2 font-medium text-gray-400 hover:text-secondary-500 text-xs sm:text-sm">
+                    📝 Anotaçoes
                 </button>
-                <button data-tab="historia" class="tab-button px-6 py-3 font-medium text-gray-400 hover:text-secondary-500">
-                    📖 História
+                <button data-tab="historia" class="tab-button px-3 py-2 font-medium text-gray-400 hover:text-secondary-500 text-xs sm:text-sm">
+                    📖 Hist
                 </button>
             </div>
         </div>
 
         <!-- Conteúdo das Telas -->
-        <div id="tab-content" class="arcane-box p-6">
+        <div id="tab-content" class="arcane-box p-4 flex-1 overflow-y-auto">
             <!-- Conteúdo será carregado dinamicamente via JavaScript -->
         </div>
     </div>
